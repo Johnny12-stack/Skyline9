@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <ul>
+        {% for product in object_list %}
+        <li>
+            <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
+        </li>
+        <li>
+            {% if product.image %}
+            <img src="{{ product.image.url }}">
+            {% endif %}
+        
+        </li>
+        <li>
+            {{ product.rating }}
+            {{ product.price }}
+            {{ product.has_sizes }}
+        </li>
+        <li>
+             {% if user.is_authenticated %}
+                <a href="{% url 'edit_product' product.pk %}"><button>Edit</button></a>
+                <a href="{% url 'delete_product' product.pk %}"><button>Delete</button></a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
