@@ -1,0 +1,23 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: url('https://browser-salmon-basilisk-bqpjrr32.ws-eu03.gitpod.io/workspace/Skyline9/Skyline/static/Skyline/images/8905500_stock-vector-joyful-and-happy-children-jumping-on-the-grass.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: calc(100vh - 164px);
+    color: #555;
+    font-family: 'Lato';
+}
+.overlay {
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	background: white;
+	z-index: -1;
+}
+.checked {
+  color: orange;
+}

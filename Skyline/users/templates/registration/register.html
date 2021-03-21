@@ -1,14 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br/>
+<br/>
+<div class="overlay"></div>
 
-<h1>Register</h1>
+<div class="container"></div>
+    <div class="row">
+        <div class="col-6">
+            <h1>Login</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Register</button>
-    </form>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button>Register</button>
+                <br/>
+                <br/>
+                <br/>
+                <h5>Registered already?
+                    <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-info">Login</button></a>
+                </h5>
+            </form>
+        </div>
+        <div class="col-6">
+            <h1 class="display-4 logo-font text-black alert alert-primary">
+                    The new collections are here <span class="badge badge-secondary">New</span>
+            </h1>
+            <br/>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}
