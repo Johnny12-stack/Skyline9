@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'home',
     'users',
     'bag',
+    # Other
+    'crispy_forms',
+    'storages',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +59,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Skyline.urls'
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -66,12 +72,21 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+                'bag.contexts.bag_contents',
             ],
+            'builtins': [
+                'crispy_forms.templatetags.crispy_forms_tags',
+                'crispy_forms.templatetags.crispy_forms_field',
+            ]
         },
     },
 ]
 
+
 WSGI_APPLICATION = 'Skyline.wsgi.application'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
 # Database
@@ -125,9 +140,17 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static')),
 
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+
+FREE_DELIVERY_THRESHOLD = 50
+STANDARD_DELIVERY_PERCENTAGE = 10
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+STRIPE_PUBLIC_KEY = 'pk_test_51IXVOQKjigyLD93MZrj4yIMTAFWxJb84viWfclg3cyvL0RvPuTQxJFioBKTG8XIYxbPSOTlIlXd6tKCllUme8Frp00uZk8sc9A'
+STRIPE_PRIVATE_LEY = 'sk_test_51IXVOQKjigyLD93MHGvVhVEHagoV79B0vWeXtq58wROnfPBdsSfUlOLasPOnyZP0ye3ifdmeSbQqHDu84BpyVwFj0044mga5Kv'

@@ -10,22 +10,12 @@
         <div class="col-6">
             <h1>Login</h1>
 
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button>Login</button>
-                <br/>
-                <br/>
-                <br/>
-                <h5>Not registered?
-                    <a href="{% url 'register' %}"><button type="button" class="btn btn-outline-info">Register</button></a>
-                </h5>
-                <br/>
-                <br/>
-                 <h5>Change password?
-                    <a href="{% url 'change_password' %}"><button type="button" class="btn btn-outline-info">Change Password</button></a>
-                </h5>
-            </form>
+        <form class="login" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="primaryAction" type="submit">Login</button>   
+        </form>
+
         </div>
         <div class="col-6">
             <h1 class="display-4 logo-font text-black alert alert-primary">

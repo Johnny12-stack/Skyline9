@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Product, Profile
+from .models import Product
+from users.models import UserProfile
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'sku',
         'name',
-        'category',
         'price',
         'rating',
         'image',
@@ -16,4 +16,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product)
-admin.site.register(Profile)
+admin.site.register(UserProfile)

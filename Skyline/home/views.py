@@ -1,44 +1,110 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Lower
+
 from .models import Product
-from .forms import ProductForm, EditForm
-from django.urls import reverse_lazy
+from .forms import ProductForm
+
 # Create your views here.
 
-#def index(request):
-#   return render(request, 'index.html', {})
+def index(request):
+    """ A view to return the index page """
 
-class IndexView(ListView):
-    model = Product
-    template_name = 'index.html'
+    return render(request, 'index.html')
 
 
-class ProductView(DetailView):
-    model = Product
-    template_name = 'product_detail.html'
-    success_url = reverse_lazy('product_detail')
+def all_products(request):
+    """ A view to show all products """
+
+    products = Product.objects.all()
+
+    context = {
+        'products': products,
+    }
+
+    return render(request, 'products.html', context)
 
 
-class AddProductView(CreateView):
-    model = Product
-    form_class = ProductForm
-    template_name = 'add_product.html'
+def product_detail(request, product_id):
+    """ A view to show individual product details """
+
+    product = get_object_or_404(Product, pk=product_id)
+
+    context = {
+        'product': product,
+    }
+
+    return render(request, 'product_detail.html', context)
 
 
+@login_required
+def add_product(request):
+    """ Add a product to the store """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
 
-class UpdateProductView(UpdateView):
-    model = Product
-    form_class = EditForm 
-    template_name = 'edit_product.html'
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            messages.success(request, 'Successfully added product!')
+            return redirect(reverse('product_detail', args=[product.id]))
+        else:
+            messages.error(request,
+                           ('Failed to add product. '
+                            'Please ensure the form is valid.'))
+    else:
+        form = ProductForm()
+
+    template = 'add_product.html'
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
 
 
-class DeleteProductView(DeleteView):
-    model = Product
-    template_name = 'delete_product.html'
-    success_url = reverse_lazy('index')
+@login_required
+def edit_product(request, product_id):
+    """ Edit a product in the store """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Successfully updated product!')
+            return redirect(reverse('product_detail', args=[product.id]))
+        else:
+            messages.error(request,
+                           ('Failed to update product. '
+                            'Please ensure the form is valid.'))
+    else:
+        form = ProductForm(instance=product)
+        messages.info(request, f'You are editing {product.name}')
+
+    template = 'edit_product.html'
+    context = {
+        'form': form,
+        'product': product,
+    }
+
+    return render(request, template, context)
 
 
-class ProductsView(ListView):
-    model = Product
-    template_name = 'products.html'
+@login_required
+def delete_product(request, product_id):
+    """ Delete a product from the store """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+
+    product = get_object_or_404(Product, pk=product_id)
+    product.delete()
+    messages.success(request, 'Product deleted!')
+    return redirect(reverse('products'))

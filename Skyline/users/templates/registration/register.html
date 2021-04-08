@@ -8,19 +8,18 @@
 <div class="container"></div>
     <div class="row">
         <div class="col-6">
-            <h1>Login</h1>
+            <h1>Register</h1>
 
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button>Register</button>
-                <br/>
-                <br/>
-                <br/>
-                <h5>Registered already?
-                    <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-info">Login</button></a>
-                </h5>
-            </form>
+        <form class="login" method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button class="primaryAction" type="submit">{% url "register" %}</button>
+            
+        </form>
+
         </div>
         <div class="col-6">
             <h1 class="display-4 logo-font text-black alert alert-primary">
